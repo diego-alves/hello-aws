@@ -12,7 +12,7 @@ create_tag() {
     if [ $commits != "0" ]; then
         ntag=$(echo $ltag | awk -F. '{print $1"."$2"."$3+1}')
         git tag $ntag
-        echo Created tag $ltag
+        echo Created tag $ntag
     else
         echo Tag was already created $ltag
     fi
