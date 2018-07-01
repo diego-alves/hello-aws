@@ -1,4 +1,9 @@
 language: java
 
+branches:
+  only:
+    - master
+    - stable
+
 after_success:
   - ./tag.sh
