@@ -1,9 +1,27 @@
 #!/bin/bash
 
-git config --global user.email "travis@travis-ci.org"
-git config --global user.name "Travis CI"
+setup_git() {
+    git config --global user.email "travis@travis-ci.org"
+    git config --global user.name "Travis CI"
+}
 
-git tag v$(git describe --tags --first-parent | grep -oP "\d+\.\d+.\d+" | awk -F. '{print $1"."$2"."$3+1}')
+create_tag() {
+    describe=$(git describe --tags --first-parent --long)
+    ltag=$(echo $describe | cut -d- -f1)
+    commits=$(echo $describe | cut -d- -f2)
+    if [ $commits != "0" ]; then
+        git tag $(echo $ltag | awk -F. '{print $1"."$2"."$3+1}')
+        echo Created tag $ltag
+    else
+        echo Tag was already created $ltag
+    fi
+}
 
-git remote set-url origin https://${GH_TOKEN}@github.com/diego-alves/hello-aws.git
-git push --tags
+push_tag() {
+    git remote set-url origin https://${GH_TOKEN}@github.com/diego-alves/hello-aws.git
+    git push --tags
+}
+
+setup_git
+create_tag
+push_tag
